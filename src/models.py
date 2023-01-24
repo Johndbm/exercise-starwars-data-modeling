@@ -8,8 +8,23 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Favorites:
-    
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    username = Column(String, nullable=False, unique=True)
+    name = Column(String, nullable=False)
+    lastname = Column(String, nullable=False)
+    email = Column(String, nullable=False, unique=True)
+    favorite = relationship('favorite')
+
+
+class Favorite(Base):
+    __tablename__ = 'favorite'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    person_id = Column(Integer, ForeignKey('person.id'))
+    planet_id = Column(Integer, ForeignKey('planet.id'))
+
 
 class Person(Base):
     __tablename__ = 'person'
@@ -28,11 +43,14 @@ class Planet(Base):
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    name = Column(String(250), nullable=False)
+    terrain = Column(String(250))
+    population = Column(Integer)
+    # street_name = Column(String(250))
+    # street_number = Column(String(250))
+    # post_code = Column(String(250), nullable=False)
+    # person_id = Column(Integer, ForeignKey('person.id'))
+    # person = relationship(Person)
 
     def to_dict(self):
         return {}
